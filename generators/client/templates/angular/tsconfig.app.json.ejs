@@ -18,5 +18,13 @@
 -%>
 {
     "extends": "./tsconfig.base.json",
-    "files": ["<%= MAIN_SRC_DIR %>app/app.main.ts"]
+    "files": ["<%= MAIN_SRC_DIR %>app/app.main.ts"],
+    "include": [
+        "src/main/webapp/app/jsf/jsf-handlers/*/handlers/dropdown/common/**/*",
+        "src/main/webapp/app/jsf/jsf-handlers/*/handlers/dropdown/app/**/*"
+    ],
+    "exclude": [
+        "src/main/webapp/app/jsf/jsf-handlers/*/node_modules",
+        "src/main/webapp/app/jsf/jsf-handlers/*/handlers/*/api/**/*"
+    ]
 }

@@ -1,0 +1,10 @@
+@import '~@angular/material/theming';
+@import 'variables';
+
+// Import the bare minimum styles from the shared theme to ensure the application looks ok.
+//
+@include mat-core();
+
+$import-standalone: true;
+@import '../../app/jsf/jsf-themes/themes/shared/variables';
+@import '../../app/jsf/jsf-themes/themes/shared/imports-reboot';

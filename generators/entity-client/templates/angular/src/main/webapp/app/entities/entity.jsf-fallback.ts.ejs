@@ -1,0 +1,82 @@
+export const jsfFallback<%= entityAngularName %> = {
+    'schema': {
+        'type'      : 'object',
+        'properties': {
+            id: {
+                type: 'string',
+                title: 'ID',
+            },
+            <%_ for (idx in fields) {
+                const fieldName = fields[idx].fieldName;
+                const fieldNameCapitalized = fields[idx].fieldNameCapitalized;
+                const fieldNameHumanized = fields[idx].fieldNameHumanized;
+                const fieldType = fields[idx].fieldType;
+                const fieldTypeBlobContent = fields[idx].fieldTypeBlobContent;
+                let type = 'string';
+
+                if (['Integer', 'Long'].includes(fieldType)) {
+                    type = 'integer';
+                } else if (['Float', 'Double', 'BigDecimal', 'Duration'].includes(fieldType)) {
+                    type = 'number';
+                } else if (['Instant', 'ZonedDateTime', 'LocalDate'].includes(fieldType)) {
+                    type = 'date';
+                } else if (fieldType === 'Boolean') {
+                    type = 'boolean';
+                } else if (['byte[]', 'ByteBuffer'].includes(fieldType) && fieldTypeBlobContent !== 'text') {
+                    type = 'binary';
+                }
+            _%>
+            '<%= fieldName %>': {
+                'type': '<%= type %>', title: '<%= fieldNameHumanized %>'
+            },
+            <%_ } _%>
+        }
+    },
+    'layout': {
+        type : 'div',
+        items: [
+            { 'type': 'heading', level: 2, title: 'Create or edit a <%= entityClassHumanized %>' },
+            { 'type': 'hr' },
+            <%_ for (idx in fields) {
+                const fieldName = fields[idx].fieldName;
+                const fieldNameCapitalized = fields[idx].fieldNameCapitalized;
+                const fieldNameHumanized = fields[idx].fieldNameHumanized;
+                const fieldType = fields[idx].fieldType;
+                const fieldTypeBlobContent = fields[idx].fieldTypeBlobContent;
+            _%>
+            { 'key': '<%= fieldName %>' },
+            <%_ } _%>,
+
+{ type: 'hr' },
+            <%_ for (idx in fields) {
+                const fieldName = fields[idx].fieldName;
+                const fieldNameCapitalized = fields[idx].fieldNameCapitalized;
+                const fieldNameHumanized = fields[idx].fieldNameHumanized;
+                const fieldType = fields[idx].fieldType;
+                const fieldTypeBlobContent = fields[idx].fieldTypeBlobContent;
+            _%>
+            { type: 'span',
+                title: '{{ value }}',
+                templateData: {
+                    $eval       : `return { value: $val.<%= fieldName %> }`,
+                    dependencies: ['<%= fieldName %>']
+                }
+            },
+            <%_ } _%>
+{ 'type': 'hr' },
+            {
+                type: 'button',
+                title: 'Save',
+                preferences: {
+                  color: 'primary',
+                  variant: 'basic',
+                },
+                onClick: {
+                  emit: {
+                    event: 'save',
+                  },
+                },
+            },
+        ]
+    }
+};

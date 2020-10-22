@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   inkscape:version="1.0 (4035a4fb49, 2020-05-01)"
+   sodipodi:docname="button-toggle-unknown-custom.svg"
+   id="svg22"
+   version="1.1"
+   stroke-linejoin="round"
+   stroke-linecap="round"
+   fill="none"
+   stroke="#000000"
+   stroke-width="1.5"
+   viewBox="0 0 24 24"
+   height="40"
+   width="40"
+   class="icon icon-tabler icon-tabler-artboard">
+  <metadata
+     id="metadata28">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs26" />
+  <sodipodi:namedview
+     inkscape:snap-global="false"
+     inkscape:snap-to-guides="false"
+     inkscape:snap-grids="false"
+     inkscape:snap-others="false"
+     inkscape:snap-nodes="false"
+     inkscape:object-nodes="false"
+     inkscape:current-layer="svg22"
+     inkscape:window-maximized="1"
+     inkscape:window-y="-9"
+     inkscape:window-x="-9"
+     inkscape:cy="20"
+     inkscape:cx="20"
+     inkscape:zoom="20.75"
+     showgrid="false"
+     id="namedview24"
+     inkscape:window-height="1001"
+     inkscape:window-width="1920"
+     inkscape:pageshadow="2"
+     inkscape:pageopacity="0"
+     guidetolerance="10"
+     gridtolerance="10"
+     objecttolerance="10"
+     borderopacity="1"
+     bordercolor="#666666"
+     pagecolor="#ffffff" />
+  <path
+     id="path2"
+     d="M0 0h24v24H0z"
+     stroke="none" />
+  <g
+     id="g220">
+    <rect
+       x="5.3729482"
+       y="10"
+       width="4"
+       height="4"
+       rx="0.5"
+       id="rect4"
+       style="stroke-width:0.75" />
+    <line
+       x1="2.8729479"
+       y1="10"
+       x2="3.3729479"
+       y2="10"
+       id="line6"
+       style="stroke-width:0.75" />
+    <line
+       x1="2.8729479"
+       y1="14"
+       x2="3.3729479"
+       y2="14"
+       id="line8"
+       style="stroke-width:0.75" />
+    <line
+       x1="5.3729482"
+       y1="7.5"
+       x2="5.3729482"
+       y2="8"
+       id="line10"
+       style="stroke-width:0.75" />
+    <line
+       x1="9.3729477"
+       y1="7.5"
+       x2="9.3729477"
+       y2="8"
+       id="line12"
+       style="stroke-width:0.75" />
+    <line
+       x1="11.372948"
+       y1="10"
+       x2="11.872948"
+       y2="10"
+       id="line14"
+       style="stroke-width:0.75" />
+    <line
+       x1="11.372948"
+       y1="14"
+       x2="11.872948"
+       y2="14"
+       id="line16"
+       style="stroke-width:0.75" />
+    <line
+       x1="5.3729482"
+       y1="16"
+       x2="5.3729482"
+       y2="16.5"
+       id="line18"
+       style="stroke-width:0.75" />
+    <line
+       x1="9.3729477"
+       y1="16"
+       x2="9.3729477"
+       y2="16.5"
+       id="line20"
+       style="stroke-width:0.75" />
+  </g>
+  <g
+     transform="matrix(1.7814226,0,0,1.7814226,-12.624741,1.0551674)"
+     id="g205">
+    <g
+       id="g209">
+      <line
+         id="line6-8-1"
+         y2="7.3522749"
+         x2="17.002409"
+         y1="7.3497777"
+         x1="17.002409"
+         style="stroke-width:0.249715" />
+      <path
+         id="path8-0"
+         d="M 17.002409,6.4757766 A 0.37457196,0.37457196 0 0 1 17.252123,6.1012047 0.64925806,0.64925806 0 1 0 16.50298,5.1023462"
+         style="stroke-width:0.249715" />
+    </g>
+  </g>
+</svg>

@@ -27,10 +27,20 @@ import { <%= entityAngularName %>UpdateComponent } from './<%= entityFileName %>
 import { <%= entityAngularName %>DeleteDialogComponent } from './<%= entityFileName %>-delete-dialog.component';
 <%_ } _%>
 import { <%= entityInstance %>Route } from './<%= entityFileName %>.route';
+<%_ if (entityAngularName === 'JsfForm') { _%>
+import { JsfModule, KalJsfBuilderModule }                    from '@kalmia/jsf-app';
+<%_ } else { _%>
+import { JsfModule }                    from '@kalmia/jsf-app';
+<%_ } %>
+
 
 @NgModule({
     imports: [
         <%= angularXAppName %>SharedModule,
+        JsfModule,
+<%_ if (entityAngularName === 'JsfForm') { _%>
+        KalJsfBuilderModule,
+<%_ } %>
         RouterModule.forChild(<%= entityInstance %>Route)
     ],
     declarations: [

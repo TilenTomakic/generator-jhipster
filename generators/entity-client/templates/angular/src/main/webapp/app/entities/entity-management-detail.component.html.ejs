@@ -21,6 +21,12 @@
         <div *ngIf="<%= entityInstance %>">
             <h2><span jhiTranslate="<%= i18nKeyPrefix %>.detail.title"><%= entityClassHumanized %></span> {{ <%= entityInstance %>.id }}</h2>
 
+            <jsf-kal-jsf-doc
+                    *ngIf="jsfEntity && jsfEntity.jsfDocument"
+                    [enableThemeRender]="false"
+                    [doc]="jsfEntity.jsfDocument">
+            </jsf-kal-jsf-doc>
+
             <hr>
 
             <<%= jhiPrefixDashed %>-alert-error></<%= jhiPrefixDashed %>-alert-error>
@@ -119,6 +125,20 @@
                 <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Edit</span>
             </button>
             <%_ } _%>
+
+            <button *ngIf="!jsfEntity.id"
+                    type="button"
+                    [routerLink]="['/jsf-form', 'new']"
+                    [state]="{ jsfEntity: jsfEntity }"
+                    class="btn btn-primary">
+                <fa-icon icon="wrench"></fa-icon>&nbsp;<span>Create UI</span>
+            </button>
+            <button *ngIf="jsfEntity.id"
+                    type="button"
+                    [routerLink]="['/jsf-form', jsfEntity.id, 'edit', { jsfEntity: jsfEntity }]"
+                    class="btn btn-primary">
+                <fa-icon icon="wrench"></fa-icon>&nbsp;<span>Edit UI</span>
+            </button>
         </div>
     </div>
 </div>

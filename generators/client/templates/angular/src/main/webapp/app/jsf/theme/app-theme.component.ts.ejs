@@ -1,0 +1,27 @@
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, Renderer2, ViewChild, ViewContainerRef } from '@angular/core';
+import { JsfResponsiveService, JsfThemeRenderMode, ThemeRendererService }                                        from '@kalmia/jsf-app';
+import { ActivatedRoute }                                                                                        from '@angular/router';
+import { ThemeDefaultPreferences }                                                                               from '../jsf-themes/themes/default/base/theme-default.preferences';
+import { ThemeDefaultBreakpoints }                                                                               from 'app/jsf/jsf-themes/themes/default/base/theme-default.breakpoints';
+
+@Component({
+  selector: 'jhi-app-theme',
+  templateUrl: './app-theme.component.html',
+  styleUrls: ['./app-theme.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class AppThemeComponent {
+  @ViewChild('themeContainer', { read: ViewContainerRef, static: true })
+  themeContainer: ViewContainerRef | undefined;
+
+  constructor(
+    private route: ActivatedRoute,
+    private renderer: Renderer2,
+    private responsiveService: JsfResponsiveService,
+    private themeRendererService: ThemeRendererService,
+    private cdRef: ChangeDetectorRef
+  ) {
+    (this.themeRendererService as any).__proto__._globalThemePreferences = ThemeDefaultPreferences;
+    this.responsiveService.breakpoints = ThemeDefaultBreakpoints;
+  }
+}

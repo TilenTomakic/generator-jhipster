@@ -17,26 +17,12 @@
  limitations under the License.
 -%>
 {
-  "plugins": ["@typescript-eslint/tslint"],
-  "extends": ["jhipster"],
   "parserOptions": {
     "project": "./tsconfig.base.json"
   },
-  "rules": {
-    "@typescript-eslint/tslint/config": [
-      "error",
-      {
-        "lintFile": "./tslint.json"
-      }
-    ],
-    "@typescript-eslint/no-unused-vars": [
-      "warn",
-      {
-        "vars": "all",
-        "args": "after-used",
-        "ignoreRestSiblings": false
-      }
-    ],
-    "@typescript-eslint/no-non-null-assertion": "off"
-  }
+  "emitWarning": false,
+  "emitError": false,
+  "failOnError": false,
+  "failOnWarning": false,
+  "rules": {}
 }

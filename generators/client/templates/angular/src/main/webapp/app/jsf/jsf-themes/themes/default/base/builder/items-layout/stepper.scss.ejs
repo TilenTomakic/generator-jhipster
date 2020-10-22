@@ -1,0 +1,16 @@
+.jsf-lb-stepper {
+
+  .step-icon {
+    border: 1px solid $border-color;
+  }
+
+  .jsf-lb-stepper-header-item {
+    &.active {
+      .step-icon {
+        background-color: mat-color($theme-palette-primary);
+        color: mat-color($theme-palette-primary, default-contrast);
+      }
+    }
+  }
+
+}

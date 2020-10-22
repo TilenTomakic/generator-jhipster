@@ -22,6 +22,7 @@ import { errorRoute } from './layouts/error/error.route';
 import { navbarRoute } from './layouts/navbar/navbar.route';
 import { DEBUG_INFO_ENABLED } from 'app/app.constants';
 import { Authority } from 'app/shared/constants/authority.constants';
+import { KalJsfProxyFrameDocComponent } from '@kalmia/jsf-app';
 
 import { UserRouteAccessService } from 'app/core/auth/user-route-access-service';
 
@@ -48,6 +49,10 @@ const LAYOUT_ROUTES = [
                     loadChildren: () => import('./account/account.module').then(m => m.AccountModule)
                 },
                 <%_ } _%>
+                {
+                    path        : '__jsf-proxy',
+                    component: KalJsfProxyFrameDocComponent
+                },
                 ...LAYOUT_ROUTES
             ],
             { enableTracing: DEBUG_INFO_ENABLED }

@@ -1,0 +1,49 @@
+@import 'variables';
+
+/**
+ * Import theme styles
+ */
+@import 'theme';
+
+/**
+ * Global app styles
+ */
+html, body, app-root {
+  height: 100%;
+  overflow: hidden;
+
+  -webkit-font-smoothing: antialiased;
+}
+
+/**
+ * Overlay scrollbars overrides
+ */
+.os-host {
+  .os-padding {
+    // Disable creating a new stacking context for each scrollbar.
+    z-index: initial !important;
+  }
+}
+
+/*
+* Material overrides
+*/
+.mat-drawer {
+  border-right: none !important;
+}
+
+/**
+ * CDK
+ */
+.cdk-global-scrollblock {
+  overflow: hidden;
+}
+
+/**
+ * Disable JSF animations inside cdk drag preview elements
+ */
+.cdk-drag-preview {
+  .jsf-animatable {
+    animation: none !important;
+  }
+}

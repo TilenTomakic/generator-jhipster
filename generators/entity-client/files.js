@@ -90,6 +90,10 @@ const angularFiles = {
                     file: 'entities/entity.service.ts',
                     renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}.service.ts`,
                 },
+                {
+                    file: 'entities/entity.jsf-fallback.ts',
+                    renameTo: generator => `entities/${generator.entityFolderName}/${generator.entityFileName}.jsf-fallback.ts`,
+                },
             ],
         },
         {

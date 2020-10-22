@@ -477,6 +477,11 @@ module.exports = class extends BaseBlueprintGenerator {
                             this.gitInitialized = shellStr.code === 0;
                             if (this.gitInitialized) this.log(chalk.green.bold('Git repository initialized.'));
                             else this.warning(`Failed to initialize Git repository.\n ${shellStr.stderr}`);
+                            this.gitExec(
+                                'submodule add https://github.com/kalmiallc/jsf-contrib-handlers.git src/main/webapp/app/jsf/jsf-handlers/common',
+                                { trace: false }
+                            );
+                            this.gitExec('git submodule init', { trace: false });
                         }
                     } else {
                         this.warning('Git repository could not be initialized, as Git is not installed on your system');

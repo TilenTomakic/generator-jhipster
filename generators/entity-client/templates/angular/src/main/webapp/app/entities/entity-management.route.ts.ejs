@@ -32,6 +32,14 @@ import { <%= entityAngularName %>DetailComponent } from './<%= entityFileName %>
 import { <%= entityAngularName %>UpdateComponent } from './<%= entityFileName %>-update.component';
 <%_ } _%>
 
+import { AppThemeComponent } from '../../jsf/theme/app-theme.component';
+<%_ if (entityAngularName === 'JsfForm') { _%>
+import { JsfDefinition }     from '@kalmia/jsf-common-es2015';
+<%_ } else { _%>
+import { JsfDefinitionEntityResolve } from '../jsf-form/jsf-form.route';
+<%_ } %>
+import { JsfEntityInterface } from '../../jsf/jsf-entity.interface';
+
 @Injectable({ providedIn: 'root' })
 export class <%= entityAngularName %>Resolve implements Resolve<I<%= entityAngularName %>> {
     constructor(private service: <%= entityAngularName %>Service, private router: Router) {}
@@ -54,8 +62,41 @@ export class <%= entityAngularName %>Resolve implements Resolve<I<%= entityAngul
     }
 }
 
+<%_ if (entityAngularName === 'JsfForm') { _%>
+@Injectable({ providedIn: 'root' })
+export class JsfDefinitionEntityResolve implements Resolve<JsfEntityInterface> {
+  constructor(private service: JsfFormService, private router: Router) {}
+
+  resolve(route: ActivatedRouteSnapshot): Observable<JsfEntityInterface> | Observable<null> {
+    const jsfDefinitionKey = route.data['jsfDefinitionKey'];
+    if (jsfDefinitionKey) {
+      return this.service.query({ 'key.equals': jsfDefinitionKey }).pipe(
+        flatMap((jsfForms: HttpResponse<JsfForm[]>) => {
+          const jsfDef = (jsfForms.body || [])
+            .find(x => x.key === jsfDefinitionKey);
+          if (jsfDef) {
+            const jsfEntity: JsfEntityInterface = jsfDef as any;
+            jsfEntity.jsfDefinition = JSON.parse(jsfDef.jsfDefinition);
+            return of(jsfEntity);
+          } else {
+            return of(null);
+          }
+        })
+      );
+    }
+    return of(null);
+  }
+}
+<%_ } %>
+
 export const <%= entityInstance %>Route: Routes = [
-    {
+
+            {
+            path     : '',
+            component: AppThemeComponent,
+            children : [
+
+            {
         path: '',
         component: <%= entityAngularName %>Component,
         data: {
@@ -71,11 +112,13 @@ export const <%= entityInstance %>Route: Routes = [
         path: ':id/view',
         component: <%= entityAngularName %>DetailComponent,
         resolve: {
-            <%= entityInstance %>: <%= entityAngularName %>Resolve
+            <%= entityInstance %>: <%= entityAngularName %>Resolve,
+            jsfEntity: JsfDefinitionEntityResolve
         },
         data: {
             authorities: [Authority.USER],
-            pageTitle: <% if (enableTranslation) { %>'<%= angularAppName %>.<%= entityTranslationKey %>.home.title'<% } else { %>'<%= entityClassPlural %>'<% } %>
+            pageTitle: <% if (enableTranslation) { %>'<%= angularAppName %>.<%= entityTranslationKey %>.home.title'<% } else { %>'<%= entityClassPlural %>'<% } %>,
+            jsfDefinitionKey: '<%= entityInstance %>'
         },
         canActivate: [UserRouteAccessService]
     },
@@ -84,11 +127,13 @@ export const <%= entityInstance %>Route: Routes = [
         path: 'new',
         component: <%= entityAngularName %>UpdateComponent,
         resolve: {
-            <%= entityInstance %>: <%= entityAngularName %>Resolve
+            <%= entityInstance %>: <%= entityAngularName %>Resolve,
+            jsfEntity: JsfDefinitionEntityResolve
         },
         data: {
             authorities: [Authority.USER],
-            pageTitle: <% if (enableTranslation) { %>'<%= angularAppName %>.<%= entityTranslationKey %>.home.title'<% } else { %>'<%= entityClassPlural %>'<% } %>
+            pageTitle: <% if (enableTranslation) { %>'<%= angularAppName %>.<%= entityTranslationKey %>.home.title'<% } else { %>'<%= entityClassPlural %>'<% } %>,
+            jsfDefinitionKey: '<%= entityInstance %>'
         },
         canActivate: [UserRouteAccessService]
     },
@@ -96,13 +141,17 @@ export const <%= entityInstance %>Route: Routes = [
         path: ':id/edit',
         component: <%= entityAngularName %>UpdateComponent,
         resolve: {
-            <%= entityInstance %>: <%= entityAngularName %>Resolve
+            <%= entityInstance %>: <%= entityAngularName %>Resolve,
+            jsfEntity: JsfDefinitionEntityResolve
         },
         data: {
             authorities: [Authority.USER],
-            pageTitle: <% if (enableTranslation) { %>'<%= angularAppName %>.<%= entityTranslationKey %>.home.title'<% } else { %>'<%= entityClassPlural %>'<% } %>
+            pageTitle: <% if (enableTranslation) { %>'<%= angularAppName %>.<%= entityTranslationKey %>.home.title'<% } else { %>'<%= entityClassPlural %>'<% } %>,
+            jsfDefinitionKey: '<%= entityInstance %>'
         },
         canActivate: [UserRouteAccessService]
     },
     <%_ } _%>
+
+            ]}
 ];

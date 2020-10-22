@@ -1,0 +1,8 @@
+/**
+ * Mixin for deep styles limited to host component
+ */
+@mixin deep() {
+  :host ::ng-deep {
+    @content;
+  }
+}

@@ -1,3 +1,5 @@
+console.log('CUSTOM DEV JHIPSTER GEN USED !!!');
+
 /**
  * Copyright 2013-2020 the original author or authors from the JHipster project.
  *

@@ -1,0 +1,30 @@
+// Reset border color on each items router
+jsf-layout-builder-items-router {
+  outline-color: $border-color;
+}
+
+// Drag placeholder
+.jsf-builder-dragging {
+  .jsf-builder-new-layout-drag-placeholder {
+    .kal-jsf-builder-card-button {
+      all: initial;
+
+      height: 40px !important;
+      padding: 0 !important;
+      margin: 5px 0 !important;
+
+      background-color: $white !Important;
+
+      border: 2px dashed mat-color($theme-palette-primary) !important;
+      border-radius: 0 !important;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      .kal-jsf-builder-card-button-label {
+        display: none;
+      }
+    }
+  }
+}

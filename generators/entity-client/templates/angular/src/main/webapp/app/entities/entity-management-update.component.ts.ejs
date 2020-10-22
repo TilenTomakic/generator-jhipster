@@ -24,12 +24,13 @@ const rxjsMapIsUsed = query.rxjsMapIsUsed;
 const selectableEntities = query.selectableEntities;
 const selectableManyToManyEntities = query.selectableManyToManyEntities;
 _%>
-import { Component, OnInit<% if (fieldsContainImageBlob) { %>, ElementRef<% } %> } from '@angular/core';
+import { ViewChild, Component, OnInit<% if (fieldsContainImageBlob) { %>, ElementRef<% } %> } from '@angular/core';
 import { HttpResponse } from '@angular/common/http';
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 import { FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 <%_ if ( rxjsMapIsUsed ) { _%>
 import { map } from 'rxjs/operators';
 <%_ } _%>
@@ -43,6 +44,11 @@ import { JhiDataUtils, JhiFileLoadError, JhiEventManager, JhiEventWithContent } 
 
 import { I<%= entityAngularName %>, <%= entityAngularName %> } from 'app/shared/model/<%= entityModelFileName %>.model';
 import { <%= entityAngularName %>Service } from './<%= entityFileName %>.service';
+import { JsfEntityInterface }                         from '../../jsf/jsf-entity.interface';
+import { jsfFallback<%= entityAngularName %> } from './<%= entityFileName %>.jsf-fallback';
+import { Bind, JsfBuilder, JsfDefinition, JsfFormEventInterface } from '@kalmia/jsf-common-es2015';
+import { BuilderOutputInterface, ModuleCacheService } from '@kalmia/jsf-app';
+import * as html2canvas from 'html2canvas';
 <%_ if (fieldsContainBlob) { _%>
 import { AlertError } from 'app/shared/alert/alert-error.model';
 <%_ } _%>
@@ -93,9 +99,63 @@ _%>
 
 @Component({
     selector: '<%= jhiPrefixDashed %>-<%= entityFileName %>-update',
-    templateUrl: './<%= entityFileName %>-update.component.html'
+    templateUrl: './<%= entityFileName %>-update.component.html',
+<%_ if (entityAngularName === 'JsfForm') { _%>
+    styles: [`
+        .jh-ui-builder-wrap {
+        width: 100%;
+        height: calc(100vh - 200px);
+        }
+    `]
+<%_ } %>
 })
 export class <%= entityAngularName %>UpdateComponent implements OnInit {
+
+    <%_ if (entityAngularName !== 'JsfForm') { _%>
+        jsfEntity: JsfEntityInterface;
+        builder: JsfBuilder;
+    <%_ } %>
+    // get jsfDoc(): JsfDefinition {
+    //     return jsfFallback<%= entityAngularName %> as any;
+    // }
+
+<%_ if (entityAngularName === 'JsfForm') { _%>
+    routeDataCalled: boolean = false;
+    routeParamMapCalled: boolean = false;
+    forceFallbackJsf: JsfEntityInterface;
+    jsfDefCache: JsfDefinition;
+    get jsfDoc(): JsfDefinition {
+      if (this.jsfDefCache) {
+        return this.jsfDefCache;
+      }
+      if (!this.routeDataCalled || !this.routeParamMapCalled) {
+        return;
+      }
+      if (!this.editForm.get(['id'])!.value && this.forceFallbackJsf?.jsfDefinition) {
+        console.log('using data pass from router');
+        this.jsfDefCache = this.forceFallbackJsf?.jsfDefinition;
+        return this.jsfDefCache;
+      }
+      if (this.editForm.get(['jsfDefinition'])!.value) {
+        console.log('using reactive form data');
+        this.jsfDefCache = JSON.parse(this.editForm.get(['jsfDefinition'])!.value);
+        return this.jsfDefCache;
+      } else {
+        console.log('using default');
+        this.jsfDefCache = {
+          schema: { type: 'object', properties: {} },
+          layout: { type: 'div', items: [] }
+        };
+        return this.jsfDefCache;
+      }
+    }
+    get storageKey() {
+        return this.editForm.get(['entityKey'])!.value;
+    }
+    @ViewChild('builderWrap') builderWrap;
+<%_ } %>
+
+
     isSaving = false;
     <%_ for (const idx in variables) { _%>
     <%- variables[idx] %>
@@ -140,6 +200,25 @@ _%>
 <%_ } _%>
     });
 
+<%_ if (entityAngularName !== 'JsfForm') { _%>
+    @Bind()
+    async onFormEvent($event: JsfFormEventInterface) {
+        console.log('Form Event', $event);
+
+        if ($event.event === 'save') {
+          const value = $event.value;
+          const builderValue = this.builder.getValue();
+          this.editForm.setValue(builderValue);
+          this.save();
+        }
+    }
+
+    @Bind()
+    public formBuilderCreated(builder: JsfBuilder) {
+        this.builder = builder;
+    }
+<%_ } %>
+
     constructor(
         <%_ if (fieldsContainBlob) { _%>
         protected dataUtils: JhiDataUtils,
@@ -166,7 +245,7 @@ _%>
     ) {}
 
     ngOnInit(): void {
-        this.activatedRoute.data.subscribe(({ <%= entityInstance %> }) => {
+        this.activatedRoute.data.subscribe(({ <%= entityInstance %>, jsfEntity }) => {
             <%_ if (fieldsContainInstant || fieldsContainZonedDateTime) { _%>
             if (!<%= entityInstance %>.id) {
                 const today = moment().startOf('day');
@@ -184,11 +263,36 @@ _%>
             <%_ } _%>
 
             this.updateForm(<%= entityInstance %>);
+            <%_ if (entityAngularName === 'JsfForm') { _%>
+            this.routeDataCalled = true;
+            <%_ } %>
+            <%_ if (entityAngularName !== 'JsfForm') { _%>
+            this.jsfEntity = jsfEntity || { jsfDefinition: jsfFallback<%= entityAngularName %> };
+            this.jsfEntity.jsfDocument = {  ...this.jsfEntity.jsfDefinition };
+            this.jsfEntity.jsfDocument.value = <%= entityInstance %>;
+            this.jsfEntity.jsfDefinition.$title = '<%= entityInstance %>';
+            this.jsfEntity.entityKey = '<%= entityInstance %>';
+            <%_ } %>
 
             <%_ for (idx in queries) { _%>
             <%- queries[idx] %>
             <%_ } _%>
         });
+
+        <%_ if (entityAngularName === 'JsfForm') { _%>
+        this.activatedRoute.paramMap
+          .pipe(map(() => window.history.state))
+          .subscribe(x => {
+            console.log('* JSF BUILDER DATA', x);
+            this.forceFallbackJsf = x?.jsfEntity;
+            this.routeParamMapCalled = true;
+            // this.cdRef.detectChanges();
+            if (this.forceFallbackJsf) {
+              this.editForm.get(['key']).setValue(this.forceFallbackJsf.entityKey);
+              this.editForm.get(['entityKey']).setValue(this.forceFallbackJsf.entityKey);
+            }
+          });
+        <%_ } %>
     }
 
     updateForm(<%= entityInstance %>: I<%= entityAngularName %>): void {
@@ -342,4 +446,36 @@ _%>
         return option;
     }
     <%_ } _%>
+
+    <%_ if (entityAngularName === 'JsfForm') { _%>
+    builderSave(data: BuilderOutputInterface) {
+        if (!this.storageKey) {
+            return this.builderSaveAs(data);
+        }
+        this._builderSave(data);
+    }
+
+    builderSaveAs(data: BuilderOutputInterface) {
+        this.editForm.get(['key'])!.setValue(prompt('Enter form key', 'my-form'));
+        this.editForm.get(['entityKey'])!.setValue(prompt('Enter form key', 'my-form'));
+        this._builderSave(data);
+    }
+
+    async _builderSave(data: BuilderOutputInterface) {
+        const canvas: any = await html2canvas(this.builderWrap.nativeElement, {
+                width: 800,
+                height: 600,
+                windowWidth: 800,
+                windowHeight: 600,
+            }).catch(console.error);
+        console.log(canvas);
+        console.log(canvas.toDataURL('image/png'));
+        const jsfDef: any = data.definition;
+        jsfDef.$preview = canvas.toDataURL('image/png');
+        this.editForm.get(['jsfDefinition'])!.setValue(JSON.stringify(jsfDef));
+        this.save();
+    }
+    <%_ } else { _%>
+
+    <%_ } %>
 }

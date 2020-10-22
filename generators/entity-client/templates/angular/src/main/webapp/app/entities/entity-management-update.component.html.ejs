@@ -16,10 +16,32 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
+<%_ if (entityAngularName === 'JsfForm') { _%>
+<div class="jh-ui-builder-wrap" #builderWrap>
+    <jsf-kal-jsf-builder *ngIf="jsfDoc"
+                         [jsfDefinition]="jsfDoc"
+                         [key]="storageKey"
+                         (close)="previousState()"
+                         (save)="builderSave($event)"
+                         (saveAs)="builderSaveAs($event)"
+                         class="builder-component"
+    >
+    </jsf-kal-jsf-builder>
+</div>
+<%_ } else { _%>
+
 <div class="row justify-content-center">
     <div class="col-8">
         <form name="editForm" role="form" novalidate (ngSubmit)="save()" [formGroup]="editForm">
             <h2 id="<%= jhiPrefixDashed %>-<%= entityFileName %>-heading" jhiTranslate="<%= i18nKeyPrefix %>.home.createOrEditLabel">Create or edit a <%= entityClassHumanized %></h2>
+
+            <jsf-kal-jsf-doc
+                    *ngIf="jsfEntity && jsfEntity.jsfDocument"
+                    [onFormEvent]="onFormEvent"
+                    [onFormBuilderCreated]="formBuilderCreated"
+                    [enableThemeRender]="false"
+                    [doc]="jsfEntity.jsfDocument">
+            </jsf-kal-jsf-doc>
 
             <div>
                 <<%= jhiPrefixDashed %>-alert-error></<%= jhiPrefixDashed %>-alert-error>
@@ -272,3 +294,4 @@ _%>
         </form>
     </div>
 </div>
+<%_ } %>

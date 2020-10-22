@@ -16,7 +16,7 @@
  See the License for the specific language governing permissions and
  limitations under the License.
 -%>
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { <%_ if (pagination !== 'no') { _%>HttpHeaders, <% } %>HttpResponse } from '@angular/common/http';
 <%_ if (pagination === 'pagination') { _%>
 import { ActivatedRoute, ParamMap, Router, Data } from '@angular/router';
@@ -123,6 +123,7 @@ export class <%= entityAngularName %>Component implements OnInit, OnDestroy {
         }
         this.<%= entityInstancePlural %> = data || [];
         this.ngbPaginationPage = this.page;
+        this.cdRef.detectChanges();
     }
 
     protected onError(): void {
